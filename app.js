@@ -1,7 +1,9 @@
 // Esperamos a que el HTML esté cargado antes de tocarlo
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Datos de ejemplo: aquí puedes poner candidaturas reales tuyas
-  const candidaturas = [
+  // 1. Datos iniciales (solo se usan si no hay nada guardado todavía)
+  const STORAGE_KEY = "jobflow_candidaturas";
+
+  const CANDIDATURAS_INICIALES = [
     {
       id: 1,
       puesto: "Frontend Developer Junior",
@@ -31,7 +33,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   ];
 
-  let siguienteId = 4; // ID para la próxima candidatura que añadamos
+  let candidaturas = [];
+
+  // Intentamos cargar desde localStorage
+  const datosGuardados = localStorage.getItem(STORAGE_KEY);
+  if (datosGuardados) {
+    candidaturas = JSON.parse(datosGuardados);
+  } else {
+    // Si no hay nada guardado, usamos las iniciales y las persistimos
+    candidaturas = [...CANDIDATURAS_INICIALES];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(candidaturas));
+  }
+
+  // Calculamos el siguiente id disponible
+  let siguienteId =
+    candidaturas.length > 0
+      ? Math.max(...candidaturas.map((c) => c.id)) + 1
+      : 1;
+
 
   // 2. Elemento del DOM donde pintaremos las tarjetas
   const listaCandidaturas = document.getElementById("listaCandidaturas");
@@ -119,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const index = candidaturas.findIndex((c) => c.id === id);
         if (index !== -1) {
           candidaturas.splice(index, 1);
+          guardarEnLocalStorage();
           aplicarFiltro();
         }
       });
@@ -159,7 +179,11 @@ document.addEventListener("DOMContentLoaded", () => {
     formCandidatura.reset();
   }
 
+  function guardarEnLocalStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(candidaturas));
+  }
 
+  // 4. Eventos
   filtroEstado.addEventListener("change", () => {
     aplicarFiltro();
   });
@@ -211,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Añadimos al array
     candidaturas.push(nuevaCandidatura);
+    guardarEnLocalStorage();
 
     // Volvemos a aplicar filtros actuales (estado + búsqueda)
     aplicarFiltro();
@@ -222,7 +247,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 5. Primera llamada: aplicamos filtros (estado = Todos, búsqueda vacía)
   aplicarFiltro();
-
-
 
 });
