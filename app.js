@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. Datos de ejemplo: aquí puedes poner candidaturas reales tuyas
   const candidaturas = [
     {
+      id: 1,
       puesto: "Frontend Developer Junior",
       empresa: "Empresa X",
       ubicacion: "Barcelona · En remoto",
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
       notas: "Feedback muy positivo en el primer contacto, a la espera de respuesta."
     },
     {
+      id: 2,
       puesto: "Junior Laravel Developer",
       empresa: "Empresa Y",
       ubicacion: "Híbrido",
@@ -19,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       notas: "Candidatura enviada por LinkedIn, sin respuesta todavía."
     },
     {
+      id: 3,
       puesto: "Junior Frontend (React)",
       empresa: "Empresa Z",
       ubicacion: "Remoto",
@@ -27,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
       notas: "Proceso interesante, pero finalmente eligieron a otra persona."
     }
   ];
+
+  let siguienteId = 4; // ID para la próxima candidatura que añadamos
 
   // 2. Elemento del DOM donde pintaremos las tarjetas
   const listaCandidaturas = document.getElementById("listaCandidaturas");
@@ -89,10 +94,34 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="text-xs text-slate-500 hover:text-slate-700">
             Ver detalle
           </button>
+          <button
+            class="text-xs text-rose-500 hover:text-rose-700 btn-borrar"
+            data-id="${c.id}"
+          >
+            Borrar
+          </button>
         </div>
       `;
 
       listaCandidaturas.appendChild(article);
+    });
+
+    // Añadimos comportamiento al botón "Borrar"
+    const botonesBorrar = listaCandidaturas.querySelectorAll(".btn-borrar");
+
+    botonesBorrar.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = Number(btn.dataset.id);
+
+        const confirmar = confirm("¿Quieres borrar esta candidatura?");
+        if (!confirmar) return;
+
+        const index = candidaturas.findIndex((c) => c.id === id);
+        if (index !== -1) {
+          candidaturas.splice(index, 1);
+          aplicarFiltro();
+        }
+      });
     });
   }
 
@@ -171,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const nuevaCandidatura = {
+      id: siguienteId++,
       puesto,
       empresa,
       ubicacion,
