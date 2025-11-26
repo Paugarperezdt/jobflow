@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>JobFlow - Gestor de candidaturas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 text-slate-900">
+    <div class="min-h-screen max-w-5xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8">
+            <p class="text-xs font-semibold tracking-[0.2em] text-sky-800 uppercase">
+                Panel personal
+            </p>
+            <h1 class="text-3xl font-bold tracking-tight mb-2">
+                JobFlow · Mis candidaturas
+            </h1>
+            <p class="text-sm text-slate-600 max-w-xl">
+                Pequeña app personal para seguir las ofertas a las que aplico como desarrolladora frontend.
+            </p>
+        </header>
+        
+        <!-- Resumen -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <p class="text-xs text-slate-500 uppercase">Total candidaturas</p>
+                <p class="text-2xl font-semibold mt-1">12</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <p class="text-xs text-slate-500 uppercase">En proceso</p>
+                <p class="text-2xl font-semibold mt-1 text-emerald-600">4</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <p class="text-xs text-slate-500 uppercase">Rechazadas</p>
+                <p class="text-2xl font-semibold mt-1 text-rose-600">3</p>
+            </div>
+        </section>
+        
+        <!-- Filtros -->
+        <section class="bg-white rounded-xl shadow-sm p-4 mb-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+            <div class="flex items-center gap-2">
+                <label class="text-sm text-slate-600" for="estado">Estado:</label>
+                <select id="estado" class="border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                    <option>Todos</option>
+                    <option>Enviado</option>
+                    <option>En proceso</option>
+                    <option>Entrevista</option>
+                    <option>Rechazado</option>
+                </select>
+            </div>
+            
+            <div class="flex-1 flex items-center gap-2">
+                <input
+                id="buscar"
+                type="text"
+                placeholder="Buscar por empresa o puesto..."
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                />
+            </div>
+        </section>
+        
+        <!-- Formulario nueva candidatura -->
+        <section
+        id="panelFormulario"
+        class="mb-8 bg-white rounded-xl shadow-sm p-4 border border-slate-200 hidden"
+        >
+        <h2 class="text-sm font-semibold mb-3">Añadir candidatura</h2>
+
+        <form id="formCandidatura" class="space-y-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+                <label for="puesto" class="block text-xs font-medium text-slate-600 mb-1">
+                Puesto
+                </label>
+                <input
+                id="puesto"
+                type="text"
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                placeholder="Frontend Developer Junior"
+                required
+                />
+            </div>
+
+            <div>
+                <label for="empresa" class="block text-xs font-medium text-slate-600 mb-1">
+                Empresa
+                </label>
+                <input
+                id="empresa"
+                type="text"
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                placeholder="Nombre de la empresa"
+                required
+                />
+            </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+                <label for="ubicacion" class="block text-xs font-medium text-slate-600 mb-1">
+                Ubicación
+                </label>
+                <input
+                id="ubicacion"
+                type="text"
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                placeholder="Barcelona · Remoto · Híbrido..."
+                />
+            </div>
+
+            <div>
+                <label for="fecha" class="block text-xs font-medium text-slate-600 mb-1">
+                Fecha de aplicación
+                </label>
+                <input
+                id="fecha"
+                type="date"
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                />
+            </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+                <label for="estadoNueva" class="block text-xs font-medium text-slate-600 mb-1">
+                Estado
+                </label>
+                <select
+                id="estadoNueva"
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                required
+                >
+                <option value="Enviado">Enviado</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Entrevista">Entrevista</option>
+                <option value="Rechazado">Rechazado</option>
+                </select>
+            </div>
+            </div>
+
+            <div>
+            <label for="notas" class="block text-xs font-medium text-slate-600 mb-1">
+                Notas
+            </label>
+            <textarea
+                id="notas"
+                rows="3"
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                placeholder="Detalles de la oferta, feedback, enlaces..."
+            ></textarea>
+            </div>
+
+            <div class="flex items-center gap-2 justify-end pt-2">
+            <button
+                type="button"
+                id="btnCancelarFormulario"
+                class="text-xs px-3 py-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
+            >
+                Cancelar
+            </button>
+            <button
+                type="submit"
+                class="text-xs px-4 py-2 rounded-lg bg-sky-900 text-white font-medium hover:bg-sky-700"
+            >
+                Guardar candidatura
+            </button>
+            </div>
+        </form>
+        </section>
+
+
+        <!-- Lista de candidaturas -->
+        <section id="listaCandidaturas" class="space-y-4 mb-16">
+        </section>
+        
+        <!-- Botón añadir -->
+        <button id="btnNuevaCandidatura"
+        class="fixed bottom-6 right-6 rounded-full bg-sky-900 text-white text-sm font-medium px-5 py-3 shadow-lg hover:bg-sky-500"
+        >
+        + Añadir candidatura
+    </button>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

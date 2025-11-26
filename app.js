@@ -1,0 +1,198 @@
+// Esperamos a que el HTML esté cargado antes de tocarlo
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Datos de ejemplo: aquí puedes poner candidaturas reales tuyas
+  const candidaturas = [
+    {
+      puesto: "Frontend Developer Junior",
+      empresa: "Empresa X",
+      ubicacion: "Barcelona · En remoto",
+      fecha: "10/11/2025",
+      estado: "En proceso",
+      notas: "Feedback muy positivo en el primer contacto, a la espera de respuesta."
+    },
+    {
+      puesto: "Junior Laravel Developer",
+      empresa: "Empresa Y",
+      ubicacion: "Híbrido",
+      fecha: "05/11/2025",
+      estado: "Enviado",
+      notas: "Candidatura enviada por LinkedIn, sin respuesta todavía."
+    },
+    {
+      puesto: "Junior Frontend (React)",
+      empresa: "Empresa Z",
+      ubicacion: "Remoto",
+      fecha: "01/02/2026",
+      estado: "Rechazado",
+      notas: "Proceso interesante, pero finalmente eligieron a otra persona."
+    }
+  ];
+
+  // 2. Elemento del DOM donde pintaremos las tarjetas
+  const listaCandidaturas = document.getElementById("listaCandidaturas");
+  const filtroEstado = document.getElementById("estado");
+  const filtroBusqueda = document.getElementById("buscar");
+  const panelFormulario = document.getElementById("panelFormulario");
+  const formCandidatura = document.getElementById("formCandidatura");
+  const btnNuevaCandidatura = document.getElementById("btnNuevaCandidatura");
+  const btnCancelarFormulario = document.getElementById("btnCancelarFormulario");
+
+  const inputPuesto = document.getElementById("puesto");
+  const inputEmpresa = document.getElementById("empresa");
+  const inputUbicacion = document.getElementById("ubicacion");
+  const inputFecha = document.getElementById("fecha");
+  const selectEstadoNueva = document.getElementById("estadoNueva");
+  const textareaNotas = document.getElementById("notas");
+
+
+  // 3. Según el estado, devolvemos clases Tailwind para el color de la pill
+  function claseEstado(estado) {
+    switch (estado) {
+      case "En proceso":
+        return "bg-emerald-50 text-emerald-700";
+      case "Enviado":
+        return "bg-slate-100 text-slate-700";
+      case "Rechazado":
+        return "bg-rose-50 text-rose-700";
+      case "Entrevista":
+        return "bg-sky-50 text-sky-700";
+      default:
+        return "bg-slate-100 text-slate-700";
+    }
+  }
+
+  // 4. Pinta en pantalla todas las candidaturas de la lista que le pasemos
+  function pintarCandidaturas(lista) {
+    // Vaciar lo que hubiera dentro del section
+    listaCandidaturas.innerHTML = "";
+
+    lista.forEach((c) => {
+      const article = document.createElement("article");
+      article.className =
+        "bg-white rounded-xl shadow-sm p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3";
+
+      article.innerHTML = `
+        <div>
+          <h2 class="text-sm font-semibold">${c.puesto}</h2>
+          <p class="text-xs text-slate-500">${c.empresa} · ${c.ubicacion}</p>
+          <p class="text-xs text-slate-500 mt-1">Aplicada el ${c.fecha}</p>
+          <p class="text-xs text-slate-500 mt-2">
+            ${c.notas}
+          </p>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <span class="inline-flex items-center rounded-full px-3 py-1 text-xs ${claseEstado(
+            c.estado
+          )}">
+            ${c.estado}
+          </span>
+          <button class="text-xs text-slate-500 hover:text-slate-700">
+            Ver detalle
+          </button>
+        </div>
+      `;
+
+      listaCandidaturas.appendChild(article);
+    });
+  }
+
+
+  function aplicarFiltro() {
+    const estadoSeleccionado = filtroEstado.value;
+
+    let lista = candidaturas;
+
+    // Si hay texto en el buscador, filtramos primero por búsqueda
+    const texto = filtroBusqueda.value.toLowerCase();
+    if (texto.trim() !== "") {
+      lista = lista.filter(c =>
+        c.puesto.toLowerCase().includes(texto) ||
+        c.empresa.toLowerCase().includes(texto)
+      );
+    }
+
+    // Si además hay un estado seleccionado, filtramos también
+    if (estadoSeleccionado !== "Todos") {
+      lista = lista.filter(c => c.estado === estadoSeleccionado);
+    }
+
+    pintarCandidaturas(lista);
+  }
+
+  function abrirFormulario() {
+    panelFormulario.classList.remove("hidden");
+    // opcional: subir un poco la vista
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function cerrarFormulario() {
+    panelFormulario.classList.add("hidden");
+    formCandidatura.reset();
+  }
+
+
+  filtroEstado.addEventListener("change", () => {
+    aplicarFiltro();
+  });
+
+  filtroBusqueda.addEventListener("input", () => {
+    aplicarFiltro();
+  });
+
+
+  btnNuevaCandidatura.addEventListener("click", () => {
+    abrirFormulario();
+  });
+
+  btnCancelarFormulario.addEventListener("click", () => {
+    cerrarFormulario();
+  });
+
+  formCandidatura.addEventListener("submit", (event) => {
+    event.preventDefault(); // evita recargar la página
+
+    const puesto = inputPuesto.value.trim();
+    const empresa = inputEmpresa.value.trim();
+    const ubicacion = inputUbicacion.value.trim() || "Sin especificar";
+    const fechaRaw = inputFecha.value;
+    const estado = selectEstadoNueva.value;
+    const notas = textareaNotas.value.trim() || "Sin notas";
+
+    if (!puesto || !empresa) {
+      alert("Puesto y empresa son obligatorios 🙂");
+      return;
+    }
+
+    // Damos formato bonito a la fecha si existe
+    let fechaFormateada = "Sin fecha";
+    if (fechaRaw) {
+      const fechaObj = new Date(fechaRaw);
+      fechaFormateada = fechaObj.toLocaleDateString("es-ES");
+    }
+
+    const nuevaCandidatura = {
+      puesto,
+      empresa,
+      ubicacion,
+      fecha: fechaFormateada,
+      estado,
+      notas
+    };
+
+    // Añadimos al array
+    candidaturas.push(nuevaCandidatura);
+
+    // Volvemos a aplicar filtros actuales (estado + búsqueda)
+    aplicarFiltro();
+
+    // Reseteamos formulario y lo ocultamos
+    cerrarFormulario();
+  });
+
+
+  // 5. Primera llamada: aplicamos filtros (estado = Todos, búsqueda vacía)
+  aplicarFiltro();
+
+
+
+});
