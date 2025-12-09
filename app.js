@@ -102,37 +102,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lista.forEach((c) => {
       const article = document.createElement("article");
-      article.className =
-        "bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 transition hover:-translate-y-0.5 hover:shadow-md";
+      article.className = "bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 transition hover:-translate-y-0.5 hover:shadow-md";
 
       article.innerHTML = `
         <div>
-          <h2 class="text-sm font-semibold">${c.puesto}</h2>
-          <p class="text-xs text-slate-500">${c.empresa} · ${c.ubicacion}</p>
-          <p class="text-xs text-slate-500 mt-1">Aplicada el ${c.fecha}</p>
-          <p class="text-xs text-slate-500 mt-2">
-            ${c.notas}
-          </p>
+          <h2 class="text-sm font-semibold text-slate-900">${c.puesto}</h2>
+            <p class="text-xs text-slate-500 mt-0.5">${c.empresa} · ${c.ubicacion}</p>
+            <p class="text-xs text-slate-400 mt-1">Aplicada el ${c.fecha}</p>
+            <p class="text-xs text-slate-600 mt-2">
+              ${c.notas}
+            </p>
         </div>
         <div class="flex items-center gap-2 self-start sm:self-auto">
-          <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium shadow-sm ${claseEstado(
-              c.estado
-              )}">
-            ${c.estado}
+          <span class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-medium shadow-sm ${claseEstado(
+            c.estado
+            )}">
+          ${c.estado}
           </span>
-
-          <button class="text-xs text-slate-500 hover:text-slate-700 btn-editar" data-id="${c.id}">
+          <button
+            class="text-[11px] text-slate-500 hover:text-sky-800 underline-offset-2 hover:underline btn-editar"
+            data-id="${c.id}"
+          >
             Editar
           </button>
           <button
-            class="text-xs text-rose-500 hover:text-rose-700 btn-borrar"
+            class="text-[11px] text-rose-500 hover:text-rose-700 underline-offset-2 hover:underline btn-borrar"
             data-id="${c.id}"
           >
             Borrar
           </button>
         </div>
       `;
-
       listaCandidaturas.appendChild(article);
     });
 

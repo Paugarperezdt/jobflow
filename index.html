@@ -7,14 +7,14 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 text-slate-900 antialiased">
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 text-slate-900 antialiased font-sans">
     <div class="min-h-screen max-w-5xl mx-auto px-4 py-8">
         <!-- Header -->
-        <header class="mb-8">
+        <header class="mb-8 space-y-1">
             <p class="text-xs font-semibold tracking-[0.2em] text-sky-800 uppercase">
                 Panel personal
             </p>
-            <h1 class="text-3xl font-bold tracking-tight mb-2">
+            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">
                 JobFlow · Mis candidaturas
             </h1>
             <p class="text-sm text-slate-600 max-w-xl">
@@ -24,22 +24,25 @@
         
         <!-- Resumen -->
         <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
-                <p class="text-xs text-slate-500 uppercase">Total candidaturas</p>
-                <p class="text-2xl font-semibold mt-1" id="totalCandidaturas">0</p>
+            <div class="bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                <p class="text-[11px] font-medium text-slate-500 uppercase tracking-[0.18em]">Total candidaturas</p>
+                <p class="text-2xl font-semibold mt-2" id="totalCandidaturas">0</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
-                <p class="text-xs text-slate-500 uppercase">En proceso</p>
-                <p class="text-2xl font-semibold mt-1 text-emerald-600" id="totalEnProceso">0</p>
+
+            <div class="bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                <p class="text-[11px] font-medium text-slate-500 uppercase tracking-[0.18em]">En proceso</p>
+                <p class="text-2xl font-semibold mt-2 text-emerald-600" id="totalEnProceso">0</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
-                <p class="text-xs text-slate-500 uppercase">Rechazadas</p>
-                <p class="text-2xl font-semibold mt-1 text-rose-600" id="totalRechazadas">0</p>
-            </div>  
+
+            <div class="bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                <p class="text-[11px] font-medium text-slate-500 uppercase tracking-[0.18em]">Rechazadas</p>
+                <p class="text-2xl font-semibold mt-2 text-rose-600" id="totalRechazadas">0</p>
+            </div>
         </section>
-        
+
+    
         <!-- Filtros -->
-        <section class="bg-white rounded-xl shadow-sm p-4 mb-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+        <section class="bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 p-4 mb-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
             <div class="flex items-center gap-2">
                 <label class="text-sm text-slate-600" for="estado">Estado:</label>
                 <select id="estado" class="border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300">
@@ -56,14 +59,14 @@
                 id="buscar"
                 type="text"
                 placeholder="Buscar por empresa o puesto..."
-                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                class="w-full border border-slate-200 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300 placeholder:text-slate-400"
                 />
             </div>
         </section>
         
         <!-- Formulario nueva candidatura -->
         <section id="panelFormulario"
-            class="mb-8 bg-white rounded-xl shadow-sm p-4 border border-slate-200 hidden transition transform origin-top scale-95">
+            class="mb-8 bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.05)] p-4 border border-slate-200 hidden transition transform origin-top scale-95">
 
         <h2 id="tituloFormulario" class="text-sm font-semibold mb-3">Añadir candidatura</h2>
 
@@ -172,7 +175,7 @@
 
 
         <!-- Lista de candidaturas -->
-        <section id="listaCandidaturas" class="space-y-4 mb-16">
+        <section id="listaCandidaturas" class="space-y-6 mb-16">
         </section>
         
         <!-- Botón añadir -->
