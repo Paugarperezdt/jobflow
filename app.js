@@ -70,6 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const tituloFormulario = document.getElementById("tituloFormulario");
   const btnSubmitFormulario = document.getElementById("btnSubmitFormulario");
 
+  // Resumen
+  const totalCandidaturasEl = document.getElementById("totalCandidaturas");
+  const totalEnProcesoEl = document.getElementById("totalEnProceso");
+  const totalRechazadasEl = document.getElementById("totalRechazadas");
+
   // Estado del modo de formulario
   let modoEdicion = false;
   let idEditando = null;
@@ -198,8 +203,13 @@ document.addEventListener("DOMContentLoaded", () => {
       lista = lista.filter(c => c.estado === estadoSeleccionado);
     }
 
+    // Actualizamos el resumen global
+    actualizarResumen();
+
+    // Pintamos la lista filtrada
     pintarCandidaturas(lista);
   }
+
 
   function abrirFormulario() {
     panelFormulario.classList.remove("hidden");
@@ -217,6 +227,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function guardarEnLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(candidaturas));
   }
+
+  function actualizarResumen() {
+    const total = candidaturas.length;
+    const enProceso = candidaturas.filter(c => c.estado === "En proceso").length;
+    const rechazadas = candidaturas.filter(c => c.estado === "Rechazado").length;
+
+    totalCandidaturasEl.textContent = total;
+    totalEnProcesoEl.textContent = enProceso;
+    totalRechazadasEl.textContent = rechazadas;
+  }
+
 
   // 4. Eventos
   filtroEstado.addEventListener("change", () => {
