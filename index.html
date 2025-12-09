@@ -7,7 +7,7 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 text-slate-900">
+<body class="min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 text-slate-900 antialiased">
     <div class="min-h-screen max-w-5xl mx-auto px-4 py-8">
         <!-- Header -->
         <header class="mb-8">
@@ -24,15 +24,15 @@
         
         <!-- Resumen -->
         <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-4">
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
                 <p class="text-xs text-slate-500 uppercase">Total candidaturas</p>
                 <p class="text-2xl font-semibold mt-1" id="totalCandidaturas">0</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-4">
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
                 <p class="text-xs text-slate-500 uppercase">En proceso</p>
                 <p class="text-2xl font-semibold mt-1 text-emerald-600" id="totalEnProceso">0</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-4">
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
                 <p class="text-xs text-slate-500 uppercase">Rechazadas</p>
                 <p class="text-2xl font-semibold mt-1 text-rose-600" id="totalRechazadas">0</p>
             </div>  
@@ -62,10 +62,9 @@
         </section>
         
         <!-- Formulario nueva candidatura -->
-        <section
-        id="panelFormulario"
-        class="mb-8 bg-white rounded-xl shadow-sm p-4 border border-slate-200 hidden"
-        >
+        <section id="panelFormulario"
+            class="mb-8 bg-white rounded-xl shadow-sm p-4 border border-slate-200 hidden transition transform origin-top scale-95">
+
         <h2 id="tituloFormulario" class="text-sm font-semibold mb-3">Añadir candidatura</h2>
 
         <form id="formCandidatura" class="space-y-3">
@@ -178,11 +177,14 @@
         
         <!-- Botón añadir -->
         <button id="btnNuevaCandidatura"
-        class="fixed bottom-6 right-6 rounded-full bg-sky-900 text-white text-sm font-medium px-5 py-3 shadow-lg hover:bg-sky-500"
-        >
-        + Añadir candidatura
-    </button>
-</div>
+            class="fixed bottom-6 right-6 rounded-full bg-sky-900 text-white text-sm font-medium px-6 py-3 shadow-lg
+            hover:bg-sky-800 hover:shadow-xl active:scale-95 transition transform duration-150 flex items-center gap-2">
+
+            <span class="text-lg">＋</span>
+            <span>Añadir candidatura</span>
+        </button>
+
+    </div>
 <script src="app.js"></script>
 </body>
 </html>

@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     lista.forEach((c) => {
       const article = document.createElement("article");
       article.className =
-        "bg-white rounded-xl shadow-sm p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3";
+        "bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 transition hover:-translate-y-0.5 hover:shadow-md";
 
       article.innerHTML = `
         <div>
@@ -115,11 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
           </p>
         </div>
         <div class="flex items-center gap-2 self-start sm:self-auto">
-          <span class="inline-flex items-center rounded-full px-3 py-1 text-xs ${claseEstado(
-            c.estado
-          )}">
+          <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium shadow-sm ${claseEstado(
+              c.estado
+              )}">
             ${c.estado}
           </span>
+
           <button class="text-xs text-slate-500 hover:text-slate-700 btn-editar" data-id="${c.id}">
             Editar
           </button>
@@ -213,16 +214,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function abrirFormulario() {
     panelFormulario.classList.remove("hidden");
-    // opcional: subir un poco la vista
+    // pequeña animación de entrada
+    panelFormulario.classList.add("opacity-0");
+    requestAnimationFrame(() => {
+      panelFormulario.classList.remove("opacity-0");
+      panelFormulario.classList.add("transition", "duration-200", "ease-out", "scale-100");
+    });
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+
   function cerrarFormulario() {
     panelFormulario.classList.add("hidden");
+    panelFormulario.classList.remove("scale-100");
     formCandidatura.reset();
     modoEdicion = false;
     idEditando = null;
   }
+
 
   function guardarEnLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(candidaturas));
