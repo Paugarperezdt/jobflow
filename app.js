@@ -67,7 +67,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputFecha = document.getElementById("fecha");
   const selectEstadoNueva = document.getElementById("estadoNueva");
   const textareaNotas = document.getElementById("notas");
+  const tituloFormulario = document.getElementById("tituloFormulario");
+  const btnSubmitFormulario = document.getElementById("btnSubmitFormulario");
 
+  // Estado del modo de formulario
+  let modoEdicion = false;
+  let idEditando = null;
 
   // 3. Según el estado, devolvemos clases Tailwind para el color de la pill
   function claseEstado(estado) {
@@ -110,8 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
           )}">
             ${c.estado}
           </span>
-          <button class="text-xs text-slate-500 hover:text-slate-700">
-            Ver detalle
+          <button class="text-xs text-slate-500 hover:text-slate-700 btn-editar" data-id="${c.id}">
+            Editar
           </button>
           <button
             class="text-xs text-rose-500 hover:text-rose-700 btn-borrar"
@@ -125,6 +130,35 @@ document.addEventListener("DOMContentLoaded", () => {
       listaCandidaturas.appendChild(article);
     });
 
+    // Añadimos comportamiento al botón "Editar"
+      const botonesEditar = listaCandidaturas.querySelectorAll(".btn-editar");
+      botonesEditar.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          const candidatura = candidaturas.find((c) => c.id === id);
+          if (!candidatura) return;
+
+          // Activamos modo edición
+          modoEdicion = true;
+          idEditando = id;
+
+          // Rellenamos el formulario con los datos existentes
+          inputPuesto.value = candidatura.puesto;
+          inputEmpresa.value = candidatura.empresa;
+          inputUbicacion.value = candidatura.ubicacion || "";
+          textareaNotas.value = candidatura.notas || "";
+          selectEstadoNueva.value = candidatura.estado || "Enviado";
+
+          // La fecha la mantenemos a nivel de datos; el input se usa solo si quieres cambiarla
+          inputFecha.value = "";
+
+          // Cambiamos título y texto del botón
+          tituloFormulario.textContent = "Editar candidatura";
+          btnSubmitFormulario.textContent = "Guardar cambios";
+
+          abrirFormulario();
+        });
+      });
     // Añadimos comportamiento al botón "Borrar"
     const botonesBorrar = listaCandidaturas.querySelectorAll(".btn-borrar");
 
@@ -144,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-
 
   function aplicarFiltro() {
     const estadoSeleccionado = filtroEstado.value;
@@ -177,6 +210,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function cerrarFormulario() {
     panelFormulario.classList.add("hidden");
     formCandidatura.reset();
+    modoEdicion = false;
+    idEditando = null;
   }
 
   function guardarEnLocalStorage() {
@@ -194,8 +229,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   btnNuevaCandidatura.addEventListener("click", () => {
+    // Modo creación
+    modoEdicion = false;
+    idEditando = null;
+
+    formCandidatura.reset();
+    tituloFormulario.textContent = "Añadir candidatura";
+    btnSubmitFormulario.textContent = "Guardar candidatura";
+
     abrirFormulario();
   });
+
 
   btnCancelarFormulario.addEventListener("click", () => {
     cerrarFormulario();
@@ -216,34 +260,55 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Damos formato bonito a la fecha si existe
-    let fechaFormateada = "Sin fecha";
-    if (fechaRaw) {
-      const fechaObj = new Date(fechaRaw);
-      fechaFormateada = fechaObj.toLocaleDateString("es-ES");
+    if (modoEdicion && idEditando !== null) {
+      // 🌟 MODO EDICIÓN
+      const index = candidaturas.findIndex((c) => c.id === idEditando);
+      if (index !== -1) {
+        // Si el usuario no pone nueva fecha, mantenemos la anterior
+        let fechaFinal = candidaturas[index].fecha;
+        if (fechaRaw) {
+          const fechaObj = new Date(fechaRaw);
+          fechaFinal = fechaObj.toLocaleDateString("es-ES");
+        }
+
+        candidaturas[index] = {
+          ...candidaturas[index],
+          puesto,
+          empresa,
+          ubicacion,
+          fecha: fechaFinal,
+          estado,
+          notas
+        };
+
+        guardarEnLocalStorage();
+        aplicarFiltro();
+        cerrarFormulario();
+      }
+    } else {
+      // 🌟 MODO CREACIÓN
+      let fechaFormateada = "Sin fecha";
+      if (fechaRaw) {
+        const fechaObj = new Date(fechaRaw);
+        fechaFormateada = fechaObj.toLocaleDateString("es-ES");
+      }
+
+      const nuevaCandidatura = {
+        id: siguienteId++,
+        puesto,
+        empresa,
+        ubicacion,
+        fecha: fechaFormateada,
+        estado,
+        notas
+      };
+
+      candidaturas.push(nuevaCandidatura);
+      guardarEnLocalStorage();
+      aplicarFiltro();
+      cerrarFormulario();
     }
-
-    const nuevaCandidatura = {
-      id: siguienteId++,
-      puesto,
-      empresa,
-      ubicacion,
-      fecha: fechaFormateada,
-      estado,
-      notas
-    };
-
-    // Añadimos al array
-    candidaturas.push(nuevaCandidatura);
-    guardarEnLocalStorage();
-
-    // Volvemos a aplicar filtros actuales (estado + búsqueda)
-    aplicarFiltro();
-
-    // Reseteamos formulario y lo ocultamos
-    cerrarFormulario();
   });
-
 
   // 5. Primera llamada: aplicamos filtros (estado = Todos, búsqueda vacía)
   aplicarFiltro();
